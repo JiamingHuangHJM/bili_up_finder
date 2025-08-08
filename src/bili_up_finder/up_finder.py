@@ -2,13 +2,12 @@ import asyncio
 import logging
 import os
 
-from search_helper.ai_search_helper import (
+from bili_up_finder.config import Config
+from bili_up_finder.search_helper.ai_search_helper import (
     decide_target_video_relevant,
     decide_user_space_video_relevant,
     expand_search_query,
 )
-
-from bili_up_finder.config import config
 from bili_up_finder.web_builder import run_web_builder
 from playwright.async_api import TimeoutError as PWTimeout
 from playwright.async_api import async_playwright
@@ -118,7 +117,7 @@ async def collect_top_videos(profile_page, anchor_selector, limit=10):
     return videos
 
 
-async def go_to_user_space(video_page, search_query) -> None:
+async def go_to_user_space(video_page, search_query: str, config: Config) -> None:
     """
     users_data 是一个全局变量，收集所有满足条件的 UP 主信息。
     每个 UP 主信息是一个字典，包含以下键：
@@ -192,7 +191,7 @@ async def go_to_user_space(video_page, search_query) -> None:
 
         return
 
-    if decide_user_space_video_relevant(all_captions, search_query):
+    if decide_user_space_video_relevant(all_captions, search_query, config.verbose):
         anchor_sel = await click_most_viewed(profile_page)
         videos = await collect_top_videos(profile_page, anchor_sel)
         logger.info(f"UP主 {uploader} 符合搜索结果...")
@@ -211,7 +210,9 @@ async def go_to_user_space(video_page, search_query) -> None:
     await profile_page.close()
 
 
-async def open_all_search_videos(page, context, search_query: str) -> None:
+async def open_all_search_videos(
+    page, context, search_query: str, config: Config
+) -> None:
     """Open each search-result video in a new tab, do something, then close it."""
     # Because every search-result “card” is made of two separately-clickable zones—the thumbnail
     # and the text block—Bilibili drops an <a> tag on each of them, both pointing to the same BV-URL.
@@ -269,13 +270,11 @@ async def open_all_search_videos(page, context, search_query: str) -> None:
         )
 
         is_relevant_search_query = decide_target_video_relevant(
-            title,
-            tags,
-            search_query=search_query,
+            title, tags, search_query, config.verbose
         )
 
         if is_relevant_search_query:
-            await go_to_user_space(video_page, search_query=search_query)
+            await go_to_user_space(video_page, search_query, config)
 
         await video_page.close()
         logger.debug("关闭视频页面")
@@ -283,7 +282,9 @@ async def open_all_search_videos(page, context, search_query: str) -> None:
     logger.info("✅  所有视频处理完毕 ... ")
 
 
-async def main(search_query):
+async def main(search_query: str, config: Config):
+    logger.info(f"开始搜索: {search_query}, 搜索up主数量上限: {config.num_up}")
+
     os.makedirs("playwright/.auth", exist_ok=True)
     # If file doesn't exist, create it with empty JSON
     if not os.path.exists("playwright/.auth/state.json"):
@@ -306,11 +307,13 @@ async def main(search_query):
             wait_until="networkidle",
         )
 
-        expanded_search_query = expand_search_query(search_query=search_query)
+        expanded_search_query = expand_search_query(
+            search_query=search_query, verbose=config.verbose
+        )
 
         while True:
             await page.locator("span.vui_tabs--nav-text", has_text="视频").click()
-            await open_all_search_videos(page, context, expanded_search_query)
+            await open_all_search_videos(page, context, expanded_search_query, config)
             if len(users_data) >= config.num_up:
                 logger.info(
                     f"已找到 {len(users_data)} 个 UP 主，达到上限 {config.num_up}，停止搜索。"
@@ -330,8 +333,7 @@ async def main(search_query):
         else:
             logger.info("没有找到符合条件的 UP 主")
 
-        await asyncio.Event().wait()  # This is for debug
-        # await browser.close()
+        await browser.close()
 
 
 if __name__ == "__main__":

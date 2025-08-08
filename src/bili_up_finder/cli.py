@@ -40,7 +40,7 @@ def cli(
     default_videos_per_page,
     min_acceptable_videos,
 ):
-    init_config(
+    config = init_config(
         num_up=num_up,
         video_go_through_per_page=video_go_through_per_page,
         default_videos_per_page=default_videos_per_page,
@@ -48,4 +48,4 @@ def cli(
         verbose=verbose,
     )
     # Run the main function with the provided search query
-    asyncio.run(main(query))
+    asyncio.run(main(query, config=config))

@@ -41,12 +41,7 @@ class Config(BaseModel):
         return v
 
 
-# Global instance
-config = Config()
-
-
-def init_config(**kwargs):
-    global config
+def init_config(**kwargs) -> Config:
     config = Config(**kwargs)
 
     load_dotenv()
@@ -59,3 +54,5 @@ def init_config(**kwargs):
         format="%(asctime)s - %(levelname)s - %(message)s",
         handlers=[console_handler, file_handler],
     )
+
+    return config
