@@ -20,7 +20,7 @@ def run_web_builder(user_data: list[dict], search_query: str) -> None:
     tpl = env.get_template("index.j2")
     html = tpl.render(user_data=user_data)
     file_name = (
-        f"reports/{search_query}_{datetime.now().strftime('%Y-%m-%d_%H:%M:%S')}.html"
+        f"reports/{search_query}_{datetime.now().strftime('%Y-%m-%d_%H_%M_%S')}.html"
     )
     Path(file_name).write_text(html, encoding="utf-8")
 
