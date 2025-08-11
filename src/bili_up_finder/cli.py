@@ -12,7 +12,7 @@ from bili_up_finder.up_finder import main
 )
 @click.option("-n", "--num-up", default=10, type=int, help="number of UPs to collect.")
 @click.option(
-    "-v", "--verbose", default=True, type=bool, help="Enable or disable debug prints."
+    "-v", "--verbose", default=False, type=bool, help="Enable or disable debug prints."
 )
 @click.option(
     "--video-go-through-per-page",
