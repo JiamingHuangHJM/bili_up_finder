@@ -1,4 +1,4 @@
-# Bili Up Finder: LLM + Playwright
+# 哔哩哔哩 UpFinder: LLM + Playwright
 
 中文 | [English](README_en.md)
 
