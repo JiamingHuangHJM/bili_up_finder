@@ -6,7 +6,6 @@
 
 Bili Up Finder 是一个基于LLM + Playwirght，旨在帮助用户根据关键词搜索 Bilibili Up主。它提供了关键词扩展、相关性判断以及使用 AI 助手生成报告等功能。
 
-
 ## 配置说明
 
 1. 确保已安装 Python 3.12 或更高版本。
