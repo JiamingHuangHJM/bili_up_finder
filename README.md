@@ -4,7 +4,7 @@
 
 ## 项目简介
 
-Bili Up Finder 是一个基于LLM + Playwirght，旨在帮助用户根据关键词搜索 Bilibili Up主。它提供了关键词扩展、相关性判断以及使用 AI 助手生成报告等功能。
+Bili Up Finder 是一款基于 LLM 与 Playwright 开发的工具，旨在帮助用户通过关键词搜索 Bilibili 的 Up 主。它提供了关键词扩展、相关性评估，以及借助 AI 助手生成报告等功能。
 
 ## 配置说明
 
