@@ -29,6 +29,16 @@ Bili Up Finder 是一个基于LLM + Playwirght，旨在帮助用户根据关键�
 
 ![](assets/workflow.png)
 
+<div style="color: red;">
+注意：本工作流旨在提供 LLM 与 Playwright 集成的参考示例，用于展示基础的工作流程与实现思路。当前实现主要侧重于功能演示，未对准确率和性能进行深入优化。后续可结合具体业务场景，对:
+<ul>
+<li>Prompt设计</li>
+<li>数据处理逻辑</li>
+<li>执行策略等方面进行改进</li>
+</ul>
+以提升最终输出的准确性与稳定性。
+</div>
+
 
 ## TO-DO
 - [ ] 支持incremental search。

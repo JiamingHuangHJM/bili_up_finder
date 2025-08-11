@@ -33,6 +33,11 @@ The generated report will be saved in the `reports` directory.
 
 ![](assets/workflow.png)
 
+<div style="color: red;">
+NB: This workflow is intended as a reference example of integrating LLM with Playwright, demonstrating the basic process and implementation approach. The current implementation focuses on functionality demonstration without extensive optimization for accuracy or performance. Future improvements can be made to prompt design, data processing logic, and execution strategies to enhance the accuracy and stability of the final output.
+</div>
+
+
 ## TO-DO
 
 - [ ] Support incremental search.
