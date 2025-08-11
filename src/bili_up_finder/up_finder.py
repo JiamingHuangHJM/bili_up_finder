@@ -27,7 +27,7 @@ uploaders = set()
 async def obtain_all_video_captions_in_profile(profile_page, scroll=True) -> list[str]:
     await profile_page.wait_for_selector("div.bili-video-card__title a")
 
-    if scroll:  # ② auto-scroll to load more cards
+    if scroll:  # auto-scroll to load more cards
         prev_height = -1
         while True:
             curr_height = await profile_page.evaluate(
@@ -229,7 +229,9 @@ async def open_all_search_videos(
 
     total = await video_links.count()
 
-    logger.debug(f"🎬  发现一共 {total} 视频链接")
+    logger.debug(
+        f"🎬  发现一共 {total} 视频链接, 页面显示{config.default_videos_per_page}个视频"
+    )
 
     spans_up_names = page.locator("span.bili-video-card__info--author")
 
@@ -243,7 +245,9 @@ async def open_all_search_videos(
         if up_name:
             up_name = up_name.strip()
 
-        logger.debug(f"▶️  视频 {i + 1}/{total}, 收集 {len(uploaders)}")
+        logger.debug(
+            f"▶️  视频 {i + 1}/{config.default_videos_per_page}, 收集 {len(uploaders)}"
+        )
 
         if up_name in processed_up_names:
             logger.debug(f"跳过已处理过的 UP 主: {up_name}")
@@ -320,7 +324,7 @@ async def main(search_query: str, config: Config):
                 )
                 break
             try:
-                # 等待下一页按钮出现
+                await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 await page.wait_for_selector("text=下一页")
                 await page.click("text=下一页")
 
