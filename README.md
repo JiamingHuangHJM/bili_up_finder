@@ -33,7 +33,6 @@ Bili Up Finder 是一个基于LLM + Playwirght，旨在帮助用户根据关键�
 
 ## TO-DO
 - [ ] 支持incremental search。
-- [ ] reports加上时间戳后缀。
 - [ ] 增加本地缓存功能。如搜索关键字相似且数量小于已缓存数量，则直接返回结果。
   
 
