@@ -1,6 +1,8 @@
-import asyncio
 import logging
 import os
+
+from playwright.async_api import TimeoutError as PWTimeout
+from playwright.async_api import async_playwright
 
 from bili_up_finder.config import Config
 from bili_up_finder.search_helper.ai_search_helper import (
@@ -9,8 +11,6 @@ from bili_up_finder.search_helper.ai_search_helper import (
     expand_search_query,
 )
 from bili_up_finder.web_builder import run_web_builder
-from playwright.async_api import TimeoutError as PWTimeout
-from playwright.async_api import async_playwright
 
 for noisy_logger in ["openai", "httpcore", "httpx", "urllib3", "playwright"]:
     logging.getLogger(noisy_logger).setLevel(logging.WARNING)
@@ -334,8 +334,3 @@ async def main(search_query: str, config: Config):
             logger.info("没有找到符合条件的 UP 主")
 
         await browser.close()
-
-
-if __name__ == "__main__":
-    # Run the follow_users function with a search query and max following limit
-    asyncio.run(main("甜妹"))

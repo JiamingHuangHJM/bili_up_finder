@@ -25,7 +25,3 @@ def run_web_builder(user_data: list[dict], search_query: str) -> None:
     Path(file_name).write_text(html, encoding="utf-8")
 
     logger.info(f"Up主报告生成成功, 保存在{file_name}")
-
-
-if __name__ == "__main__":
-    pass
