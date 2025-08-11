@@ -223,14 +223,24 @@ async def open_all_search_videos(
         "div.bili-video-card__wrap .bili-video-card__info--right > a[href*='/video/']"
     )
 
+    # 滚动到底部(不一定需要)
+    previous_height = None
+    while True:
+        await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+        await page.wait_for_timeout(500)  # 给懒加载留点时间
+        current_height = await page.evaluate("document.body.scrollHeight")
+        if previous_height == current_height:
+            break
+        previous_height = current_height
+
     video_links = page.locator(
-        "div.bili-video-card__wrap .bili-video-card__info--right > a[href*='/video/']"
+        "div.video-list-item:visible div.bili-video-card__info--right > a[href*='/video/']"
     )
 
     total = await video_links.count()
 
     logger.debug(
-        f"🎬  发现一共 {total} 视频链接, 页面显示{config.default_videos_per_page}个视频"
+        f"🎬  发现一共 {total} 视频链接, 页面显示{min(total, config.default_videos_per_page)}个视频"
     )
 
     spans_up_names = page.locator("span.bili-video-card__info--author")
@@ -324,7 +334,6 @@ async def main(search_query: str, config: Config):
                 )
                 break
             try:
-                await page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
                 await page.wait_for_selector("text=下一页")
                 await page.click("text=下一页")
 
